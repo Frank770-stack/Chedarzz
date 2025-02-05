@@ -19,17 +19,28 @@ const LoanSchema = new mongoose.Schema(
       type: Number, // You can calculate or specify the interest rate
       required: true,
     },
-    loanStatus: {
-      type: String,
-      enum: ["pending", "approved", "disbursed", "repaid", "rejected"],
-      default: "pending",
-    },
     applicationDate: {
       type: Date,
       default: Date.now,
     },
     approvalDate: {
       type: Date,
+    },
+    idFront: {
+      type: String, // URL to the uploaded file
+      required: true,
+    },
+    idBack: {
+      type: String,
+      required: true,
+    },
+    kraCertificate: {
+      type: String, //Url to the uploaded file
+      required: true,
+    },
+    adminApproved: {
+      type: Boolean,
+      default: false, // False until admin approves documents
     },
     repaymentTerms: {
       duration: {
@@ -39,6 +50,11 @@ const LoanSchema = new mongoose.Schema(
       monthlyInstallment: {
         type: Number,
         required: true,
+      },
+      loanStatus: {
+        type: String,
+        enum: ["pending", "approved", "disbursed", "repaid", "rejected"],
+        default: "pending",
       },
     },
   },

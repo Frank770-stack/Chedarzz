@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/authRoutes.js";
+import loanRoutes from "./routes/loanRoutes.js";
 
 import { connectDB } from "./config/db.js";
 
@@ -23,6 +24,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use("/api/loans", loanRoutes);
 
 //START SERVER
 const PORT = process.env.PORT;

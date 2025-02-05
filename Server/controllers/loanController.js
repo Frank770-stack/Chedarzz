@@ -5,21 +5,33 @@ export const applyForLoan = async (req, res) => {
   const { loanAmount, interestRate, repaymentTerms } = req.body;
 
   try {
-    const borrower = req.user._id; // The logged-in user is the borrower
+    if (
+      !req.files ||
+      !req.files.idFront ||
+      !req.files.idBack ||
+      !req.files.kraCertificate
+    ) {
+      return res.status(400).json({ message: "All documents are required" });
+    }
 
-    // Create a new loan application
+    const borrower = req.user._id;
+
     const newLoan = new Loan({
       borrower,
       loanAmount,
       interestRate,
       repaymentTerms,
+      idFront: req.files.idFront[0].path,
+      idBack: req.files.idBack[0].path,
+      kraCertificate: req.files.kraCertificate[0].path,
     });
 
     await newLoan.save();
 
-    res
-      .status(201)
-      .json({ message: "Loan application submitted", loan: newLoan });
+    res.status(201).json({
+      message: "Loan application submitted. Awaiting admin approval.",
+      loan: newLoan,
+    });
   } catch (error) {
     console.error("Error applying for loan:", error.message);
     res.status(500).json({ message: "Error applying for loan" });
